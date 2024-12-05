@@ -1,0 +1,19 @@
+### v7: 2024-12-02
+ - added magic order ordering
+ - started implementing kfc command
+ - updated to .net 9
+### v6: 2024-09-18
+ - increased change for debtors
+### v5: 2024-08-30
+ - fixed balance
+### v4: 2024-08-24
+ - changed database to SQLite
+ - transfer limit to 100
+ - updated random logic values
+ - orders get display more stats
+ - order done display chance and money left
+ - added random.org random
+### v3: 2024-07-10
+ - Fixed order done
+ - added idrink command
+ - added random command last or active order
