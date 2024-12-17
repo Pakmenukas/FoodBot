@@ -7,6 +7,8 @@ public class NotFoundError(NotFoundError.ErrorCode errorCode) : Error(errorCode.
     public enum ErrorCode
     {
         Initiator,
-        TargetUser
+        TargetUser,
+        Order,
+        Purchase
     }
 }

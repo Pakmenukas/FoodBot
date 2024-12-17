@@ -9,6 +9,7 @@ public class ForbiddenError(ForbiddenError.ErrorCode errorCode) : Error(errorCod
         RootRequired,
         IllegalAction,
         NoFunds,
-        TransactionLimitReached
+        TransactionLimitReached,
+        IncompleteOrder
     }
 }
