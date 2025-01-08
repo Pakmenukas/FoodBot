@@ -5,7 +5,13 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodBotSeeHashtag", "FoodBotSeeHashtag\FoodBotSeeHashtag.csproj", "{208AF8ED-DDA5-4C8B-ABAE-BAC3C5103FF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DB", "DB\DB.csproj", "{DC17E0C3-9B3E-417C-A1A6-FA9B4D7BD383}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodBot.Domain", "FoodBot.Domain\FoodBot.Domain.csproj", "{3C0D6D69-9F62-4695-901C-72A1591881BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodBot.Application", "FoodBot.Application\FoodBot.Application.csproj", "{869E4AAD-AC8B-44AC-B138-50373209CA55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodBot.Infrastructure", "FoodBot.Infrastructure\FoodBot.Infrastructure.csproj", "{59A703EF-7275-48E4-811F-AFB5233A7BAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodBot.WindowsDiscordBot", "FoodBot.WindowsDiscordBot\FoodBot.WindowsDiscordBot.csproj", "{BAEC769E-7776-4E0C-8799-62A31046546F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +23,22 @@ Global
 		{208AF8ED-DDA5-4C8B-ABAE-BAC3C5103FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{208AF8ED-DDA5-4C8B-ABAE-BAC3C5103FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{208AF8ED-DDA5-4C8B-ABAE-BAC3C5103FF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC17E0C3-9B3E-417C-A1A6-FA9B4D7BD383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC17E0C3-9B3E-417C-A1A6-FA9B4D7BD383}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC17E0C3-9B3E-417C-A1A6-FA9B4D7BD383}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC17E0C3-9B3E-417C-A1A6-FA9B4D7BD383}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C0D6D69-9F62-4695-901C-72A1591881BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C0D6D69-9F62-4695-901C-72A1591881BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C0D6D69-9F62-4695-901C-72A1591881BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C0D6D69-9F62-4695-901C-72A1591881BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{869E4AAD-AC8B-44AC-B138-50373209CA55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{869E4AAD-AC8B-44AC-B138-50373209CA55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{869E4AAD-AC8B-44AC-B138-50373209CA55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{869E4AAD-AC8B-44AC-B138-50373209CA55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59A703EF-7275-48E4-811F-AFB5233A7BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59A703EF-7275-48E4-811F-AFB5233A7BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59A703EF-7275-48E4-811F-AFB5233A7BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59A703EF-7275-48E4-811F-AFB5233A7BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAEC769E-7776-4E0C-8799-62A31046546F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAEC769E-7776-4E0C-8799-62A31046546F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAEC769E-7776-4E0C-8799-62A31046546F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEC769E-7776-4E0C-8799-62A31046546F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
