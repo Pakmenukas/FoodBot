@@ -90,13 +90,7 @@ public class BankController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case ForbiddenError:
-                    await command.RespondAsync(":exclamation:Ne administratorius:exclamation:");
-                    break;
-            }
-
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -121,13 +115,7 @@ public class BankController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra tokio vartotojo:exclamation:");
-                    break;
-            }
-
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -153,24 +141,7 @@ public class BankController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case ForbiddenError error:
-                    if (error.Code == ForbiddenError.ErrorCode.IllegalAction.ToString())
-                        await command.RespondAsync(":exclamation:Negalima sau perversti pinigu:exclamation:");;
-                    if (error.Code == ForbiddenError.ErrorCode.NoFunds.ToString())
-                        await command.RespondAsync(":exclamation:Per mažai turima pinigo:exclamation:");
-                    if (error.Code == ForbiddenError.ErrorCode.TransactionLimitReached.ToString())
-                        await command.RespondAsync($":exclamation:Per daug pinigų **{moneyObject}**:exclamation:");
-                    break;
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    break;
-                case BadRequestError:
-                    await command.RespondAsync($":exclamation:Blogas skaičius **{moneyObject}**:exclamation:");
-                    break;
-            }
-
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -195,13 +166,7 @@ public class BankController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra tokio vartotojo:exclamation:");
-                    break;
-            }
-
+            await command.RespondAsync(result.Error.Description);
             return;
         }
         
@@ -214,19 +179,9 @@ public class BankController(ISender mediator) : IController
     private async Task BalanceAllCommand(SocketSlashCommand command)
     {
         var result = await mediator.Send(new GetBalanceAllQuery(command.User.Id));
-
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case ForbiddenError:
-                    await command.RespondAsync(":exclamation:Ne administratorius:exclamation:");
-                    break;
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra tokio vartotojo:exclamation:");
-                    break;
-            }
-
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
