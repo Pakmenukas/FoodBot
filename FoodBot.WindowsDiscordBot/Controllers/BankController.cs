@@ -134,7 +134,7 @@ public class BankController(ISender mediator) : IController
         var removed = MoneySerializer.Serialize(result.Value.RemovedAmount);
         var total = MoneySerializer.Serialize(result.Value.NewAmount);
 
-        await command.RespondAsync($"<@{command.User.Id}>: pridėta **{removed}**, viso **{total}**");
+        await command.RespondAsync($"<@{command.User.Id}>: pašalinta **{removed}**, viso **{total}**");
     }
 
     private async Task TransferCommand(SocketSlashCommand command)
