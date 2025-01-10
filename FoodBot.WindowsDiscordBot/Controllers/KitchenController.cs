@@ -1,7 +1,6 @@
 using Discord;
 using Discord.WebSocket;
 using FoodBot.Application.Common;
-using FoodBot.Application.Errors;
 using FoodBot.Application.Kitchen;
 using FoodBot.Application.Server;
 using FoodBot.Domain;
@@ -136,16 +135,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case ForbiddenError error:
-                    await command.RespondAsync(":exclamation:Per mažai turima pinigo:exclamation:");
-                    break;
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    break;
-            }
-
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -173,12 +163,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    break;
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -201,18 +186,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case ForbiddenError:
-                    await command.RespondAsync($":exclamation:Per daug pinigų **{moneyObject}**:exclamation:");
-                    break;
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    break;
-                case BadRequestError:
-                    await command.RespondAsync($":exclamation:Blogas skaičius **{moneyObject}**:exclamation:");
-                    break;
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -225,15 +199,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError error:
-                    if (error.Code == NotFoundError.ErrorCode.Initiator.ToString())
-                        await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    if (error.Code == NotFoundError.ErrorCode.Order.ToString())
-                        await command.RespondAsync(":exclamation:Nėra tokio užsakymo:exclamation:");
-                    break;
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -255,22 +221,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError error:
-                    if (error.Code == NotFoundError.ErrorCode.Initiator.ToString())
-                        await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    if (error.Code == NotFoundError.ErrorCode.Order.ToString())
-                        await command.RespondAsync(":exclamation:Nėra tokio užsakymo:exclamation:");
-                    break;
-                case ForbiddenError:
-                    await command.RespondAsync($":exclamation:Per daug pinigų **{moneyObject}**:exclamation:");
-                    break;
-                case BadRequestError:
-                    await command.RespondAsync($":exclamation:Blogas skaičius **{moneyObject}**:exclamation:");
-                    break;
-
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -283,19 +234,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError error:
-                    if (error.Code == NotFoundError.ErrorCode.Initiator.ToString())
-                        await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    if (error.Code == NotFoundError.ErrorCode.Order.ToString())
-                        await command.RespondAsync(":exclamation:Nėra tokio užsakymo:exclamation:");
-                    break;
-                case ForbiddenError:
-                    await command.RespondAsync(":exclamation:Ne administratorius:exclamation:");
-                    break;
-
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -319,19 +258,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError error:
-                    if (error.Code == NotFoundError.ErrorCode.Initiator.ToString())
-                        await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    if (error.Code == NotFoundError.ErrorCode.Order.ToString())
-                        await command.RespondAsync(":exclamation:Nėra tokio užsakymo:exclamation:");
-                    break;
-                case ForbiddenError:
-                    await command.RespondAsync(":exclamation:Ne administratorius:exclamation:");
-                    break;
-
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -356,21 +283,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError error:
-                    if (error.Code == NotFoundError.ErrorCode.Initiator.ToString())
-                        await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    if (error.Code == NotFoundError.ErrorCode.Order.ToString())
-                        await command.RespondAsync(":exclamation:Nėra tokio užsakymo:exclamation:");
-                    if (error.Code == NotFoundError.ErrorCode.Purchase.ToString())
-                        await command.RespondAsync(":exclamation:Nėra užsakymų:exclamation:");
-                    break;
-                case ForbiddenError:
-                    await command.RespondAsync(":exclamation:Ne administratorius:exclamation:");
-                    break;
-
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -398,16 +311,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    break;
-                case ForbiddenError:
-                    await command.RespondAsync(":exclamation:Ne administratorius:exclamation:");
-                    break;
-
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
@@ -440,20 +344,7 @@ public class KitchenController(ISender mediator) : IController
 
         if (result.IsFailure)
         {
-            switch (result.Error)
-            {
-                case NotFoundError:
-                    await command.RespondAsync(":exclamation:Nėra iš kurio vedama, arba kuriam pervedama:exclamation:");
-                    break;
-                case ForbiddenError error:
-                    if (error.Code == ForbiddenError.ErrorCode.RootRequired.ToString())
-                        await command.RespondAsync(":exclamation:Ne administratorius:exclamation:");
-                    if (error.Code == ForbiddenError.ErrorCode.TransactionLimitReached.ToString())
-                        await command.RespondAsync(":exclamation:Per didėlė kaina:exclamation:");
-                    if (error.Code == ForbiddenError.ErrorCode.IncompleteOrder.ToString())
-                        await command.RespondAsync(":exclamation:Užsakymas dar nepabaigtas:exclamation:");
-                    break;
-            }
+            await command.RespondAsync(result.Error.Description);
             return;
         }
 
