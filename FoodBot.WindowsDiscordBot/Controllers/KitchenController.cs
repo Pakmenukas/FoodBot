@@ -270,7 +270,7 @@ public class KitchenController(ISender mediator) : IController
         for (int i = 0; i < purchaseList.Count; i++)
         {
             Purchase p = purchaseList[i];
-            txt += $"<@{p.User.DiscordId}> {p.Product} \t **{(float)p.Money / 100:#0.00}** \t ({(p.ChanceInt / (float)sum):P1}; {p.ChanceInt}/{sum})\r\n";
+            txt += $"{p.Product} \t\t <@{p.User.DiscordId}> **{(float)p.Money / 100:#0.00}** ({(p.ChanceInt / (float)sum):P1}; {p.ChanceInt})\r\n";
         }
         txt += $"Total: **{(float)purchaseList.Sum(e => e.Money) / 100:#0.00}**";
 

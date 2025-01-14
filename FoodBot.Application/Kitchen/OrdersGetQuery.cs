@@ -37,6 +37,7 @@ namespace FoodBot.Application.Kitchen
 
                 var lastIncomplete = context.Orders
                     .Include(e => e.PurchaseList)
+                        .ThenInclude(f => f.User)
                     .Where(e => !e.IsComplete)
                     .OrderByDescending(e => e.DateCreated)
                     .FirstOrDefault();
