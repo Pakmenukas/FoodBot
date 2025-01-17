@@ -29,7 +29,7 @@ namespace FoodBot.Application.Kitchen
                     return error;
                 }
 
-                if (request.Amount <= 0)
+                if (request.Amount < 0)
                 {
                     var error = new BadRequestError(BadRequestError.ErrorCode.AmountTooLow);
                     await logger.LogError(request.InitiatorUserId, nameof(OrderCommand), error);
