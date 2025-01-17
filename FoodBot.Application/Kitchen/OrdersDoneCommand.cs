@@ -68,6 +68,7 @@ namespace FoodBot.Application.Kitchen
 
                 order.IsComplete = true;
                 order.DateCompleted = DateTime.Now;
+                order.GarbagePerson = garbagePerson;
 
                 context.SaveChanges();
 
