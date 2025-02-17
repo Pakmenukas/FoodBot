@@ -72,7 +72,9 @@ namespace FoodBot.Application.Kitchen
 
                 context.SaveChanges();
 
-                await logger.LogSuccess(request.InitiatorUserId, nameof(OrdersDoneCommand));
+                var moneySumForLog = order.PurchaseList.Sum(e => e.Money);
+
+                await logger.LogSuccess(request.InitiatorUserId, nameof(OrdersDoneCommand), new List<string> { moneySumForLog.ToString() });
 
                 return new Response(order.PurchaseList, garbagePerson, random, sum);
             }
