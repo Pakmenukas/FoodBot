@@ -34,7 +34,7 @@ public sealed class RemoveMoneyCommand(ulong initiatorUserId, int amount)
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await logger.LogSuccess(request.InitiatorUserId, nameof(RemoveMoneyCommand));
+            await logger.LogSuccess(request.InitiatorUserId, nameof(RemoveMoneyCommand), new List<string> { request.Amount.ToString() });
             return new Response(request.Amount, initiatorUser.Money);
         }
     }

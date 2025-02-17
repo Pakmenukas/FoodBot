@@ -61,7 +61,7 @@ public sealed class AddMoneyCommand(ulong initiatorUserId, AddMoneyCommand.Targe
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await logger.LogSuccess(request.InitiatorUserId, nameof(AddMoneyCommand));
+            await logger.LogSuccess(request.InitiatorUserId, nameof(AddMoneyCommand), new List<string> { request.Amount.ToString(), targetUser.Name.ToString(), targetUser.Id.ToString() });
             return new Response(request.Amount, targetUser.Money);
         }
     }
