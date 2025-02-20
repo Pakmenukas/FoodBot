@@ -10,7 +10,7 @@ namespace FoodBot.Application.Bank;
 
 public sealed class GetBalanceAllQuery(ulong initiatorUserId) : IRequest<Result<List<GetBalanceAllQuery.Response>>>
 {
-    public sealed record Response(ulong DiscordId, int Amount);
+    public sealed record Response(ulong DiscordId, int Amount, DateTime? Date);
     private ulong InitiatorUserId => initiatorUserId;
 
     public sealed class Handler(MainContext context, ILogger logger)
@@ -35,7 +35,13 @@ public sealed class GetBalanceAllQuery(ulong initiatorUserId) : IRequest<Result<
                 await logger.LogError(request.InitiatorUserId, nameof(GetBalanceAllQuery), error);
                 return error;
             }
-            
+
+            var lastOrders = context.Orders
+                .AsNoTracking()
+                .GroupBy(e => new { e.GarbagePersonId })
+                .Select(e => new { UserId = e.Key.GarbagePersonId, Date = e.Max(x => x.DateCompleted) })
+                .ToList();
+
             var users = await context.Users
                 .AsNoTracking()
                 .OrderByDescending(e => e.Money)
@@ -43,7 +49,7 @@ public sealed class GetBalanceAllQuery(ulong initiatorUserId) : IRequest<Result<
 
             await logger.LogSuccess(request.InitiatorUserId, nameof(GetBalanceAllQuery));
 
-            return users.Select(e => new Response(e.DiscordId, e.Money)).ToList();
+            return users.Select(e => new Response(e.DiscordId, e.Money, lastOrders.FirstOrDefault(f => f.UserId == e.Id)?.Date)).ToList();
         }
     }
 }

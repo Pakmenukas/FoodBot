@@ -189,7 +189,8 @@ public class BankController(ISender mediator) : IController
         {
             var amount = MoneySerializer.Serialize(x.Amount);
             var status = i == 0 ? ":trophy:" : UserStatusUtils.GetUserMoneyStatusEmoji(x.Amount);
-            return $"{i}. <@{x.DiscordId}>: **{amount}** {status}";
+            var date = x.Date != null ? x.Date.Value.ToString("yyyy-MM-dd") : "nenešė";
+            return $"{i}. <@{x.DiscordId}>: **{amount}** {status} \t {date}";
         }).ToList();
 
         var total = MoneySerializer.Serialize(result.Value.Sum(x => x.Amount));
