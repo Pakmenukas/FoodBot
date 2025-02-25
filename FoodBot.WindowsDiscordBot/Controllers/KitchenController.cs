@@ -167,7 +167,7 @@ public class KitchenController(ISender mediator) : IController
             return;
         }
 
-        await command.RespondAsync($"<@{command.User.Id}> {taste} akcijinis su {drink}");
+        await command.RespondAsync($"{taste} akcijinis su {drink}");
     }
 
     private async Task OrderCommand(SocketSlashCommand command)
