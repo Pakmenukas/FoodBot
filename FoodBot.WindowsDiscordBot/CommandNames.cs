@@ -21,4 +21,6 @@ internal static class CommandNames
     public const string Idrink = "idrink";
     public const string Kfc = "kfc";
     public const string OrdersMagicGet = "orders_magic_get";
+
+    public const string RandomOption = "random_option";
 }

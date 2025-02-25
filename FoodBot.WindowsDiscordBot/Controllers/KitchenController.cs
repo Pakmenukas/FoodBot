@@ -69,7 +69,7 @@ public class KitchenController(ISender mediator) : IController
 
         command = new SlashCommandBuilder()
             .WithName(CommandNames.Kfc)
-            .WithDescription("Kfc maisto užsakymo test")
+            .WithDescription("Kfc maisto užsakymas")
             .AddOption(new SlashCommandOptionBuilder()
                 .WithName("astrumas")
                 .WithDescription("ką valgysi tu")
@@ -94,6 +94,12 @@ public class KitchenController(ISender mediator) : IController
                 .WithRequired(false)
                 .WithType(ApplicationCommandOptionType.String)
             );
+        commandList.Add(command.Build());
+
+        command = new SlashCommandBuilder()
+            .WithName(CommandNames.RandomOption)
+            .WithDescription("pasirinkti atsitiktį iš sąrašo")
+            .AddOption("opcijos", ApplicationCommandOptionType.String, "žodžiai atskirti tarpais", isRequired: true);
         commandList.Add(command.Build());
 
         return commandList;
@@ -132,6 +138,9 @@ public class KitchenController(ISender mediator) : IController
                 break;
             case CommandNames.Kfc:
                 await KfcCommand(command);
+                break;
+            case CommandNames.RandomOption:
+                await RandomOptionCommand(command);
                 break;
         }
     }
@@ -367,6 +376,29 @@ public class KitchenController(ISender mediator) : IController
         }
 
         await command.RespondAsync($"{text}");
+    }
+
+    private async Task RandomOptionCommand(SocketSlashCommand command)
+    {
+        var input = command.Data.Options.First().Value.ToString()!.Trim();
+        var options = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (options.Length == 0)
+        {
+            await command.RespondAsync("Nėra nieko įvesta");
+            return;
+        }
+
+        var random = new Random();
+        var selectedOption = options[random.Next(options.Length)];
+
+        var optionsList = string.Join(", ", options);
+        await command.RespondAsync(
+            $"""
+            Renkamasi iš: {optionsList}
+            Pasirinkta: **{selectedOption}** :game_die:
+            """
+        );
     }
 
 }
