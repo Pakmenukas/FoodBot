@@ -1,6 +1,7 @@
 using Discord;
 using Discord.WebSocket;
 using FoodBot.Application.Common;
+using FoodBot.Application.Helpers;
 using FoodBot.Application.Kitchen;
 using FoodBot.Application.Server;
 using FoodBot.Domain;
@@ -73,18 +74,24 @@ public class KitchenController(ISender mediator) : IController
                 .WithName("astrumas")
                 .WithDescription("ką valgysi tu")
                 .WithRequired(true)
-                .AddChoice("original/neaštrus", "original")
-                .AddChoice("aštrus", "aštrus")
+                .AddChoice("🍗 original/neaštrus", "original")
+                .AddChoice("🔥 aštrus", "aštrus")
                 .WithType(ApplicationCommandOptionType.String)
             )
             .AddOption(new SlashCommandOptionBuilder()
                 .WithName("gerimas")
                 .WithDescription("ką gersi tu")
                 .WithRequired(true)
-                .AddChoice("cola", "cola")
-                .AddChoice("cola_zero", "cola_zero")
-                .AddChoice("fanta", "fanta")
-                .AddChoice("sprite", "sprite")
+                .AddChoice("🥤 cola", "cola")
+                .AddChoice("🥤❌ cola zero", "cola zero")
+                .AddChoice("🍊 fanta", "fanta")
+                .AddChoice("🍋 sprite", "sprite")
+                .WithType(ApplicationCommandOptionType.String)
+            )
+            .AddOption(new SlashCommandOptionBuilder()
+                .WithName("papildomai")
+                .WithDescription("dar ko nors???")
+                .WithRequired(false)
                 .WithType(ApplicationCommandOptionType.String)
             );
         commandList.Add(command.Build());
@@ -158,8 +165,9 @@ public class KitchenController(ISender mediator) : IController
     {
         var taste = command.Data.Options.First(o => o.Name == "astrumas").Value.ToString();
         var drink = command.Data.Options.First(o => o.Name == "gerimas").Value.ToString();
+        var extraItems = command.Data.Options.FirstOrDefault(o => o.Name == "papildomai")?.Value?.ToString();
 
-        var result = await mediator.Send(new KfcCommand(command.User.Id, taste!, drink!));
+        var result = await mediator.Send(new KfcCommand(command.User.Id, taste!, drink!, extraItems!));
 
         if (result.IsFailure)
         {
@@ -167,7 +175,8 @@ public class KitchenController(ISender mediator) : IController
             return;
         }
 
-        await command.RespondAsync($"{taste} akcijinis su {drink}");
+        var orderString = KfcHelpers.ConstructKfcOrderString(taste!, drink!, extraItems!);
+        await command.RespondAsync(orderString);
     }
 
     private async Task OrderCommand(SocketSlashCommand command)

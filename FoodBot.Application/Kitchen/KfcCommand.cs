@@ -1,5 +1,6 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
+using FoodBot.Application.Helpers;
 using FoodBot.Domain;
 using FoodBot.Infrastructure;
 using MediatR;
@@ -8,11 +9,12 @@ using MyResult;
 
 namespace FoodBot.Application.Kitchen;
 
-public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink) : IRequest<Result>
+public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink, string extraItems) : IRequest<Result>
 {
     private ulong InitiatorUserId => initiatorUserId;
     private string Taste => taste;
     private string Drink => drink;
+    private string ExtraItems => extraItems;
 
     public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<KfcCommand, Result>
     {
@@ -27,7 +29,8 @@ public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink
                 return error;
             }
 
-            AddOrder(initiatorUser, $"{request.Taste} akcijinis su {request.Drink}", 0);
+            var orderString = KfcHelpers.ConstructKfcOrderString(request.Taste, request.Drink, request.ExtraItems);
+            AddOrder(initiatorUser, orderString, 0);
 
             await logger.LogSuccess(request.InitiatorUserId, nameof(KfcCommand));
             return Result.Ok();
