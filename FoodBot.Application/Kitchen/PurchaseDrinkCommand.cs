@@ -51,7 +51,7 @@ public sealed class PurchaseDrinkCommand(ulong initiatorUserId) : IRequest<Resul
             var transferAmount = command.Money;
             initiatorUser.Money -= transferAmount;
             command.ToUser.Money += transferAmount;
-            command.Count++;
+            command.Count--;
             await context.SaveChangesAsync(cancellationToken);
 
             return new Response(
