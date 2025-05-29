@@ -54,6 +54,8 @@ public sealed class PurchaseDrinkCommand(ulong initiatorUserId) : IRequest<Resul
             command.Count--;
             await context.SaveChangesAsync(cancellationToken);
 
+            await logger.LogSuccess(request.InitiatorUserId, nameof(PurchaseDrinkCommand));
+
             return new Response(
                 command.Money, 
                 command.Count,
