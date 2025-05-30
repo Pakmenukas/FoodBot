@@ -23,4 +23,5 @@ internal static class CommandNames
     public const string OrdersMagicGet = "orders_magic_get";
 
     public const string RandomOption = "random_option";
+    public const string IdrinkLeaderboard = "idrink_leaderboard";
 }
