@@ -421,6 +421,8 @@ public class KitchenController(ISender mediator) : IController
 
         var guild = client.GetGuild(command.GuildId!.Value);
 
+        await guild.DownloadUsersAsync();
+
         var sb = new StringBuilder();
         sb.AppendLine("# 🍺 **iDrink Leaderboard** 🍺");
         sb.AppendLine("════════════════════════");
