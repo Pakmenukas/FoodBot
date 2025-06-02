@@ -8,6 +8,7 @@ using FoodBot.Domain;
 using FoodBot.WindowsDiscordBot.Controllers.Common;
 using FoodBot.WindowsDiscordBot.Utils;
 using MediatR;
+using System.Text;
 
 namespace FoodBot.WindowsDiscordBot.Controllers;
 
@@ -102,6 +103,11 @@ public class KitchenController(ISender mediator) : IController
             .AddOption("opcijos", ApplicationCommandOptionType.String, "žodžiai atskirti tarpais", isRequired: true);
         commandList.Add(command.Build());
 
+        command = new SlashCommandBuilder()
+            .WithName(CommandNames.IdrinkLeaderboard)
+            .WithDescription("Peržiūrėti idrink leaderboardą");
+        commandList.Add(command.Build());
+
         return commandList;
     }
 
@@ -141,6 +147,9 @@ public class KitchenController(ISender mediator) : IController
                 break;
             case CommandNames.RandomOption:
                 await RandomOptionCommand(command);
+                break;
+            case CommandNames.IdrinkLeaderboard:
+                await IdrinkLeaderboardCommand(command);
                 break;
         }
     }
@@ -399,6 +408,44 @@ public class KitchenController(ISender mediator) : IController
             Pasirinkta: **{selectedOption}** :game_die:
             """
         );
+    }
+
+    private async Task IdrinkLeaderboardCommand(SocketSlashCommand command)
+    {
+        var result = await mediator.Send(new IdrinkLeaderboardQuery(command.User.Id));
+        var leaderboard = result.Value.IdrinkLeaderboardList;
+
+        var sb = new StringBuilder();
+        sb.AppendLine("# 🍺 **iDrink Leaderboard** 🍺");
+        sb.AppendLine("════════════════════════");
+
+        for (int i = 0; i < leaderboard.Count; i++)
+        {
+            var item = leaderboard[i];
+            string medal = i switch
+            {
+                0 => "🥇",
+                1 => "🥈",
+                2 => "🥉",
+                _ => $"#{i + 1}"
+            };
+
+            if (i < 3)
+            {
+                sb.AppendLine($"## {medal} <@{item.UserId}> - {item.DrinkCount} drinks");
+            }
+            else
+            {
+                if (i == 3)
+                {
+                    sb.AppendLine("_ _");
+                }
+
+                sb.AppendLine($"{medal} <@{item.UserId}> - {item.DrinkCount} drinks");
+            }
+        }
+
+        await command.RespondAsync(sb.ToString());
     }
 
 }

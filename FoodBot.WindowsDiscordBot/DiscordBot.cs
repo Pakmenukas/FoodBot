@@ -1,4 +1,4 @@
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using FoodBot.WindowsDiscordBot.Controllers.Common;
@@ -29,6 +29,14 @@ public sealed class DiscordBot
     
     private async Task SlashCommandHandler(SocketSlashCommand command)
     {
+        const ulong FOOD_FORTRESS_CHANNEL_ID = 598067153052106754;
+
+        if (command.Channel.Id != FOOD_FORTRESS_CHANNEL_ID)
+        {
+            await command.RespondAsync($"❌ Komandas galima naudoti tik <#{FOOD_FORTRESS_CHANNEL_ID}> kanale", ephemeral: true);
+            return;
+        }
+
         foreach (var userCommand in _controllerFactory.Commands)
         {
             await userCommand.SlashCommandHandler(command);
