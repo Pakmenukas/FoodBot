@@ -28,6 +28,7 @@ namespace FoodBot.Application.Kitchen
                         g.Count()
                     ))
                     .OrderByDescending(x => x.DrinkCount)
+                        .ThenBy(x => x.UserName)
                     .ToList();
 
                 await logger.LogSuccess(request.InitiatorUserId, nameof(IdrinkLeaderboardQuery));

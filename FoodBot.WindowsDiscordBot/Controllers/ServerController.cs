@@ -29,7 +29,7 @@ public sealed class ServerController : IController
         return commandList;
     }
 
-    public async Task SlashCommandHandler(SocketSlashCommand command)
+    public async Task SlashCommandHandler(SocketSlashCommand command, DiscordSocketClient client)
     {
         switch (command.Data.Name)
         {

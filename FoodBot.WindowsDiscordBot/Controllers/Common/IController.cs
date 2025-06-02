@@ -6,5 +6,5 @@ namespace FoodBot.WindowsDiscordBot.Controllers.Common;
 public interface IController
 {
     public List<ApplicationCommandProperties> GetCommands();
-    public Task SlashCommandHandler(SocketSlashCommand command);
+    public Task SlashCommandHandler(SocketSlashCommand command, DiscordSocketClient client);
 }
