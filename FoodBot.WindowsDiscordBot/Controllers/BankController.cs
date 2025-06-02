@@ -50,29 +50,29 @@ public class BankController(ISender mediator) : IController
         return commandList;
     }
 
-    public async Task SlashCommandHandler(SocketSlashCommand command)
+    public async Task SlashCommandHandler(SocketSlashCommand command, DiscordSocketClient client)
     {
         switch (command.Data.Name)
         {
             case CommandNames.Add:
-                await AddCommand(command);
+                await AddCommand(command, client);
                 break;
             case CommandNames.Remove:
-                await RemoveCommand(command);
+                await RemoveCommand(command, client);
                 break;
             case CommandNames.Transfer:
-                await TransferCommand(command);
+                await TransferCommand(command, client);
                 break;
             case CommandNames.Balance:
-                await BalanceCommand(command);
+                await BalanceCommand(command, client);
                 break;
             case CommandNames.BalanceAll:
-                await BalanceAllCommand(command);
+                await BalanceAllCommand(command, client);
                 break;
         }
     }
 
-    private async Task AddCommand(SocketSlashCommand command)
+    private async Task AddCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var targetUser = command.Data.Options.First().Value as SocketUser;
         var moneyObject = command.Data.Options.Skip(1).First().Value;
@@ -100,7 +100,7 @@ public class BankController(ISender mediator) : IController
         await command.RespondAsync($"<@{targetUser.Id}>: pridėta **{added}**, viso **{total}**");
     }
 
-    private async Task RemoveCommand(SocketSlashCommand command)
+    private async Task RemoveCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var moneyObject = command.Data.Options.First().Value;
         var amount = MoneySerializer.Deserialize(moneyObject);
@@ -125,7 +125,7 @@ public class BankController(ISender mediator) : IController
         await command.RespondAsync($"<@{command.User.Id}>: pašalinta **{removed}**, viso **{total}**");
     }
 
-    private async Task TransferCommand(SocketSlashCommand command)
+    private async Task TransferCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var targetUser = command.Data.Options.First().Value as SocketUser;
         var moneyObject = command.Data.Options.Skip(1).First().Value;
@@ -160,7 +160,7 @@ public class BankController(ISender mediator) : IController
         );
     }
 
-    private async Task BalanceCommand(SocketSlashCommand command)
+    private async Task BalanceCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new GetBalanceQuery(command.User.Id));
 
@@ -176,7 +176,7 @@ public class BankController(ISender mediator) : IController
             $"<@{command.User.Id}> iš viso: **{amount}** {UserStatusUtils.GetUserMoneyStatusEmoji(result.Value)}");
     }
 
-    private async Task BalanceAllCommand(SocketSlashCommand command)
+    private async Task BalanceAllCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new GetBalanceAllQuery(command.User.Id));
         if (result.IsFailure)

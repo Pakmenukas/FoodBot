@@ -111,50 +111,50 @@ public class KitchenController(ISender mediator) : IController
         return commandList;
     }
 
-    public async Task SlashCommandHandler(SocketSlashCommand command)
+    public async Task SlashCommandHandler(SocketSlashCommand command, DiscordSocketClient client)
     {
         switch (command.Data.Name)
         {
             case CommandNames.Idrink:
-                await DrinkCommand(command);
+                await DrinkCommand(command, client);
                 break;
             case CommandNames.Order:
-                await OrderCommand(command);
+                await OrderCommand(command, client);
                 break;
             case CommandNames.OrderMoney:
-                await OrderMoneyCommand(command);
+                await OrderMoneyCommand(command, client);
                 break;
             case CommandNames.OrderCancel:
-                await OrderCancelCommand(command);
+                await OrderCancelCommand(command, client);
                 break;
             case CommandNames.OrdersGet:
-                await OrdersGetCommand(command);
+                await OrdersGetCommand(command, client);
                 break;
             case CommandNames.OrdersMagicGet:
-                await OrdersMagicGetCommand(command);
+                await OrdersMagicGetCommand(command, client);
                 break;
             case CommandNames.OrdersDone:
-                await OrdersDoneCommand(command);
+                await OrdersDoneCommand(command, client);
                 break;
             case CommandNames.OrdersRemoveDelivery:
-                await OrdersRemoveDeliveryCommand(command);
+                await OrdersRemoveDeliveryCommand(command, client);
                 break;
             case CommandNames.Random:
-                await RandomCommand(command);
+                await RandomCommand(command, client);
                 break;
             case CommandNames.Kfc:
-                await KfcCommand(command);
+                await KfcCommand(command, client);
                 break;
             case CommandNames.RandomOption:
-                await RandomOptionCommand(command);
+                await RandomOptionCommand(command, client);
                 break;
             case CommandNames.IdrinkLeaderboard:
-                await IdrinkLeaderboardCommand(command);
+                await IdrinkLeaderboardCommand(command, client);
                 break;
         }
     }
 
-    private async Task DrinkCommand(SocketSlashCommand command)
+    private async Task DrinkCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new PurchaseDrinkCommand(command.User.Id));
 
@@ -179,7 +179,7 @@ public class KitchenController(ISender mediator) : IController
         );
     }
 
-    private async Task KfcCommand(SocketSlashCommand command)
+    private async Task KfcCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var taste = command.Data.Options.First(o => o.Name == "astrumas").Value.ToString();
         var drink = command.Data.Options.First(o => o.Name == "gerimas").Value.ToString();
@@ -197,7 +197,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync(orderString);
     }
 
-    private async Task OrderCommand(SocketSlashCommand command)
+    private async Task OrderCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var product = command.Data.Options.First().Value.ToString()!.Trim();
         var moneyObject = command.Data.Options.Skip(1).First().Value;
@@ -220,7 +220,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync($"{product} **{(float)amount.Value / 100:#0.00}** {KitchenUtils.GetRandomFood()}");
     }
 
-    private async Task OrderCancelCommand(SocketSlashCommand command)
+    private async Task OrderCancelCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new OrderCancelCommand(command.User.Id));
 
@@ -233,7 +233,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync("Užsakymas pašalintas :no_mouth:");
     }
 
-    private async Task OrderMoneyCommand(SocketSlashCommand command)
+    private async Task OrderMoneyCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var moneyObject = command.Data.Options.First().Value;
         var amount = MoneySerializer.Deserialize(moneyObject);
@@ -255,7 +255,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync($"{result.Value.Product} **{(float)result.Value.Amount / 100:#0.00}** {KitchenUtils.GetRandomFood()}");
     }
 
-    private async Task OrdersGetCommand(SocketSlashCommand command)
+    private async Task OrdersGetCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new OrdersGetQuery(command.User.Id));
 
@@ -279,7 +279,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync(txt);
     }
 
-    private async Task OrdersMagicGetCommand(SocketSlashCommand command)
+    private async Task OrdersMagicGetCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new OrdersGetQuery(command.User.Id));
 
@@ -304,7 +304,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync(txt);
     }
 
-    private async Task OrdersDoneCommand(SocketSlashCommand command)
+    private async Task OrdersDoneCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new OrdersDoneCommand(command.User.Id));
 
@@ -332,7 +332,7 @@ public class KitchenController(ISender mediator) : IController
     }
 
 
-    private async Task RandomCommand(SocketSlashCommand command)
+    private async Task RandomCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new RandomUserQuery(command.User.Id));
 
@@ -356,7 +356,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync($"{text}: <@{id}> :game_die:");
     }
 
-    private async Task OrdersRemoveDeliveryCommand(SocketSlashCommand command)
+    private async Task OrdersRemoveDeliveryCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var moneyObject = command.Data.Options.First().Value;
         var amount = MoneySerializer.Deserialize(moneyObject);
@@ -387,7 +387,7 @@ public class KitchenController(ISender mediator) : IController
         await command.RespondAsync($"{text}");
     }
 
-    private async Task RandomOptionCommand(SocketSlashCommand command)
+    private async Task RandomOptionCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var input = command.Data.Options.First().Value.ToString()!.Trim();
         var options = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -410,10 +410,16 @@ public class KitchenController(ISender mediator) : IController
         );
     }
 
-    private async Task IdrinkLeaderboardCommand(SocketSlashCommand command)
+    private async Task IdrinkLeaderboardCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
         var result = await mediator.Send(new IdrinkLeaderboardQuery(command.User.Id));
         var leaderboard = result.Value.IdrinkLeaderboardList;
+
+        var guildId = command.GuildId;
+        if (guildId is null)
+            await command.RespondAsync("Komanda galima naudoti tik serveryje", ephemeral: true);
+
+        var guild = client.GetGuild(command.GuildId!.Value);
 
         var sb = new StringBuilder();
         sb.AppendLine("# 🍺 **iDrink Leaderboard** 🍺");
@@ -422,6 +428,10 @@ public class KitchenController(ISender mediator) : IController
         for (int i = 0; i < leaderboard.Count; i++)
         {
             var item = leaderboard[i];
+
+            var guildUser = guild?.GetUser(item.UserId);
+            var displayName = guildUser?.DisplayName ?? item.UserName;
+
             string medal = i switch
             {
                 0 => "🥇",
@@ -432,7 +442,7 @@ public class KitchenController(ISender mediator) : IController
 
             if (i < 3)
             {
-                sb.AppendLine($"## {medal} <@{item.UserId}> - {item.DrinkCount} drinks");
+                sb.AppendLine($"## {medal} **{displayName}** - {item.DrinkCount} drinks");
             }
             else
             {
@@ -441,7 +451,7 @@ public class KitchenController(ISender mediator) : IController
                     sb.AppendLine("_ _");
                 }
 
-                sb.AppendLine($"{medal} <@{item.UserId}> - {item.DrinkCount} drinks");
+                sb.AppendLine($"{medal} **{displayName}** - {item.DrinkCount} drinks");
             }
         }
 

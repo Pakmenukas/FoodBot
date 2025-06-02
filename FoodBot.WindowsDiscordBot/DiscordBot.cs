@@ -30,8 +30,9 @@ public sealed class DiscordBot
     private async Task SlashCommandHandler(SocketSlashCommand command)
     {
         const ulong FOOD_FORTRESS_CHANNEL_ID = 598067153052106754;
+        const ulong FOOD_FORTRESS_TESTGROUND_CHANNEL_ID = 1035470203385024532;
 
-        if (command.Channel.Id != FOOD_FORTRESS_CHANNEL_ID)
+        if (command.Channel.Id != FOOD_FORTRESS_CHANNEL_ID && command.Channel.Id != FOOD_FORTRESS_TESTGROUND_CHANNEL_ID)
         {
             await command.RespondAsync($"❌ Komandas galima naudoti tik <#{FOOD_FORTRESS_CHANNEL_ID}> kanale", ephemeral: true);
             return;
@@ -39,7 +40,7 @@ public sealed class DiscordBot
 
         foreach (var userCommand in _controllerFactory.Commands)
         {
-            await userCommand.SlashCommandHandler(command);
+            await userCommand.SlashCommandHandler(command, _client);
         }
     }
 
