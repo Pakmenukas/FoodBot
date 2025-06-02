@@ -1,3 +1,4 @@
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using FoodBot.Application;
@@ -16,7 +17,7 @@ internal static class Program
     private static void Main()
     {
         var host = CreateHostBuilder().Build();
-        
+
         host.Services.ApplyMigrations();
 
         App.EnableVisualStyles();
@@ -58,7 +59,15 @@ internal static class Program
 
         services.AddSingleton<DiscordBot>();
         services.AddSingleton<CommandService>();
-        services.AddSingleton<DiscordSocketClient>();
+        services.AddSingleton<DiscordSocketClient>(provider =>
+        {
+            var config = new DiscordSocketConfig
+            {
+                GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildMembers | GatewayIntents.GuildMessages,
+                AlwaysDownloadUsers = true
+            };
+            return new DiscordSocketClient(config);
+        });
         services.AddTransient<BotLauncherForm>();
 
         return services;
