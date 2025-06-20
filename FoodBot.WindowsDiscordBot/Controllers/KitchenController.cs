@@ -9,6 +9,7 @@ using FoodBot.WindowsDiscordBot.Controllers.Common;
 using FoodBot.WindowsDiscordBot.Utils;
 using MediatR;
 using System.Text;
+using static FoodBot.Application.Kitchen.IdrinkLeaderboardQuery;
 
 namespace FoodBot.WindowsDiscordBot.Controllers;
 
@@ -105,7 +106,16 @@ public class KitchenController(ISender mediator) : IController
 
         command = new SlashCommandBuilder()
             .WithName(CommandNames.IdrinkLeaderboard)
-            .WithDescription("Peržiūrėti idrink leaderboardą");
+            .WithDescription("Peržiūrėti idrink leaderboardą")
+            .AddOption(new SlashCommandOptionBuilder()
+                .WithName("period")
+                .WithDescription("Pasirinkite laiko periodą")
+                .WithType(ApplicationCommandOptionType.String)
+                .WithRequired(false)
+                .AddChoice("Savaitės", "weekly")
+                .AddChoice("Mėnesio", "monthly")
+                .AddChoice("Metų", "yearly"));
+
         commandList.Add(command.Build());
 
         return commandList;
@@ -412,7 +422,17 @@ public class KitchenController(ISender mediator) : IController
 
     private async Task IdrinkLeaderboardCommand(SocketSlashCommand command, DiscordSocketClient client)
     {
-        var result = await mediator.Send(new IdrinkLeaderboardQuery(command.User.Id));
+        var periodOption = command.Data.Options?.FirstOrDefault(x => x.Name == "period")?.Value?.ToString();
+
+        var period = periodOption switch
+        {
+            "weekly" => LeaderboardPeriod.Weekly,
+            "monthly" => LeaderboardPeriod.Monthly,
+            "yearly" => LeaderboardPeriod.Yearly,
+            _ => LeaderboardPeriod.AllTime
+        };
+
+        var result = await mediator.Send(new IdrinkLeaderboardQuery(command.User.Id, period));
         var leaderboard = result.Value.IdrinkLeaderboardList;
 
         var guildId = command.GuildId;
@@ -424,13 +444,12 @@ public class KitchenController(ISender mediator) : IController
         await guild.DownloadUsersAsync();
 
         var sb = new StringBuilder();
-        sb.AppendLine("# 🍺 **iDrink Leaderboard** 🍺");
+        sb.AppendLine($"# 🍺 **iDrink Leaderboard - {period.ToString()}** 🍺");
         sb.AppendLine("════════════════════════");
 
         for (int i = 0; i < leaderboard.Count; i++)
         {
             var item = leaderboard[i];
-
             var guildUser = guild?.GetUser(item.UserId);
             var displayName = guildUser?.DisplayName ?? item.UserName;
 
@@ -443,16 +462,10 @@ public class KitchenController(ISender mediator) : IController
             };
 
             if (i < 3)
-            {
                 sb.AppendLine($"## {medal} **{displayName}** - {item.DrinkCount} drinks");
-            }
             else
             {
-                if (i == 3)
-                {
-                    sb.AppendLine("_ _");
-                }
-
+                if (i == 3) sb.AppendLine("_ _");
                 sb.AppendLine($"{medal} **{displayName}** - {item.DrinkCount} drinks");
             }
         }
