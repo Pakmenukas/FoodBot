@@ -12,6 +12,8 @@ public class User : BaseEntity<Guid>
     [Required]
     public string Name { get; set; }
 
+    public string? AvatarUrl { get; set; }
+
     [Required]
     public int Money { get; set; }
 

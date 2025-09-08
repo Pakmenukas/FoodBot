@@ -1,6 +1,5 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -14,7 +13,7 @@ namespace FoodBot.Application.Kitchen
         private int Amount => amount;
 
 
-        public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<OrderMoneyCommand, Result<Response>>
+        public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<OrderMoneyCommand, Result<Response>>
         {
             public async Task<Result<Response>> Handle(OrderMoneyCommand request, CancellationToken cancellationToken)
             {
@@ -57,7 +56,7 @@ namespace FoodBot.Application.Kitchen
                 var purchase = lastIncomplete.PurchaseList.First(e => e.User == initiatorUser);
                 purchase.Money = request.Amount;
 
-                context.SaveChanges();
+                await context.SaveChangesAsync(cancellationToken);
 
                 await logger.LogSuccess(request.InitiatorUserId, nameof(OrderMoneyCommand));
 

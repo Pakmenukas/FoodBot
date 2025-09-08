@@ -1,6 +1,5 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -11,7 +10,7 @@ public sealed class GetBalanceQuery(ulong initiatorUserId) : IRequest<Result<int
 {
     private ulong InitiatorUserId => initiatorUserId;
 
-    public sealed class Handler(MainContext context, ILogger logger)
+    public sealed class Handler(IMainContext context, ILogger logger)
         : IRequestHandler<GetBalanceQuery, Result<int>>
     {
         public async Task<Result<int>> Handle(GetBalanceQuery request, CancellationToken cancellationToken)

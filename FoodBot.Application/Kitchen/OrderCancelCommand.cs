@@ -1,6 +1,5 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -12,7 +11,7 @@ namespace FoodBot.Application.Kitchen
         private ulong InitiatorUserId => initiatorUserId;
 
 
-        public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<OrderCancelCommand, Result>
+        public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<OrderCancelCommand, Result>
         {
             public async Task<Result> Handle(OrderCancelCommand request, CancellationToken cancellationToken)
             {
@@ -39,7 +38,7 @@ namespace FoodBot.Application.Kitchen
                 }
 
                 context.Purchases.Remove(lastIncomplete.PurchaseList.First(e => e.User == initiatorUser));
-                context.SaveChanges();
+                await context.SaveChangesAsync(cancellationToken);
 
                 await logger.LogSuccess(request.InitiatorUserId, nameof(OrderCancelCommand));
                 return Result.Ok();

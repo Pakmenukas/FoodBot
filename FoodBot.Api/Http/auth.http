@@ -1,0 +1,6 @@
+@baseUrl = http://localhost:3123/api/auth
+
+### Auth test
+GET {{baseUrl}}/test
+Accept: application/json
+X-Api-Key: someid:test-secret

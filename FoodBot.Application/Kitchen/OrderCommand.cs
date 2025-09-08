@@ -1,8 +1,6 @@
-﻿using FoodBot.Application.Bank;
-using FoodBot.Application.Common;
+﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
 using FoodBot.Domain;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -15,7 +13,7 @@ namespace FoodBot.Application.Kitchen
         private string Product => product;
         private int Amount => amount;
 
-        public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<OrderCommand, Result>
+        public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<OrderCommand, Result>
         {
             public async Task<Result> Handle(OrderCommand request, CancellationToken cancellationToken)
             {
@@ -43,13 +41,13 @@ namespace FoodBot.Application.Kitchen
                     return error;
                 }
 
-                AddOrder(initiatorUser, request.Product, request.Amount);
+                await AddOrder(initiatorUser, request.Product, request.Amount);
 
                 await logger.LogSuccess(request.InitiatorUserId, nameof(OrderCommand));
                 return Result.Ok();
             }
 
-            private void AddOrder(User initiator, string product, int money)
+            private async Task AddOrder(User initiator, string product, int money)
             {
                 var lastIncomplete = context.Orders
                     .Include(e => e.PurchaseList)
@@ -65,7 +63,7 @@ namespace FoodBot.Application.Kitchen
                         IsComplete = false,
                     };
                     context.Orders.Add(lastIncomplete);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
                 var existing = lastIncomplete.PurchaseList.FirstOrDefault(e => e.User == initiator);
 
@@ -80,14 +78,7 @@ namespace FoodBot.Application.Kitchen
                 existing.Product = product;
                 existing.Date = DateTime.Now;
 
-                try
-                {
-                    context.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                await context.SaveChangesAsync();
             }
 
         }

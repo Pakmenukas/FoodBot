@@ -1,0 +1,5 @@
+@baseUrl = http://localhost:3123/api/bank
+
+### Get all balances
+GET {{baseUrl}}
+Accept: application/json

@@ -1,6 +1,5 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -20,7 +19,7 @@ public sealed class TransferMoneyCommand(ulong initiatorUserId, ulong targetUser
     private ulong TargetUserId => targetUserId;
     private int Amount => amount;
 
-    public sealed class Handler(MainContext context, ILogger logger)
+    public sealed class Handler(IMainContext context, ILogger logger)
         : IRequestHandler<TransferMoneyCommand, Result<Response>>
     {
         public async Task<Result<Response>> Handle(TransferMoneyCommand request, CancellationToken cancellationToken)

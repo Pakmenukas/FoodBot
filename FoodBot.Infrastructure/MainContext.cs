@@ -1,9 +1,10 @@
+using FoodBot.Application.Common;
 using FoodBot.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodBot.Infrastructure;
 
-public class MainContext : DbContext
+public class MainContext : DbContext, IMainContext
 {
     // tables
     public DbSet<Log> Logs => Set<Log>();
@@ -13,7 +14,7 @@ public class MainContext : DbContext
     public DbSet<Purchase> Purchases => Set<Purchase>();
 
     // config
-    private static string DbPath => "Data\\main.db";
+    private static string DbPath => Path.Combine(AppContext.BaseDirectory, "Data", "main.db");
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
@@ -23,7 +24,7 @@ public class MainContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        
         modelBuilder.Entity<Order>()
             .HasMany(x => x.PurchaseList)
             .WithOne(x => x.Order)

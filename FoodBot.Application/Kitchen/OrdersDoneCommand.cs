@@ -2,7 +2,6 @@
 using FoodBot.Application.Errors;
 using FoodBot.Domain;
 using FoodBot.Domain.Enums;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -15,7 +14,7 @@ namespace FoodBot.Application.Kitchen
 
         private ulong InitiatorUserId => initiatorUserId;
 
-        public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<OrdersDoneCommand, Result<Response>>
+        public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<OrdersDoneCommand, Result<Response>>
         {
             public async Task<Result<Response>> Handle(OrdersDoneCommand request, CancellationToken cancellationToken)
             {
@@ -70,7 +69,7 @@ namespace FoodBot.Application.Kitchen
                 order.DateCompleted = DateTime.Now;
                 order.GarbagePerson = garbagePerson;
 
-                context.SaveChanges();
+                await context.SaveChangesAsync(cancellationToken);
 
                 var moneySumForLog = order.PurchaseList.Sum(e => e.Money);
 

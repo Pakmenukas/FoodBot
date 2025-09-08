@@ -1,7 +1,6 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
 using FoodBot.Domain.Enums;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -13,7 +12,7 @@ public sealed class GetBalanceAllQuery(ulong initiatorUserId) : IRequest<Result<
     public sealed record Response(ulong DiscordId, int Amount, DateTime? Date);
     private ulong InitiatorUserId => initiatorUserId;
 
-    public sealed class Handler(MainContext context, ILogger logger)
+    public sealed class Handler(IMainContext context, ILogger logger)
         : IRequestHandler<GetBalanceAllQuery, Result<List<Response>>>
     {
         public async Task<Result<List<Response>>> Handle(GetBalanceAllQuery request, CancellationToken cancellationToken)

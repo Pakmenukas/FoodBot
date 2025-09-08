@@ -1,6 +1,5 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -15,7 +14,7 @@ public sealed class RemoveMoneyCommand(ulong initiatorUserId, int amount)
     private ulong InitiatorUserId => initiatorUserId;
     private int Amount => amount;
 
-    public sealed class Handler(MainContext context, ILogger logger)
+    public sealed class Handler(IMainContext context, ILogger logger)
         : IRequestHandler<RemoveMoneyCommand, Result<Response>>
     {
         public async Task<Result<Response>> Handle(RemoveMoneyCommand request, CancellationToken cancellationToken)

@@ -1,6 +1,5 @@
 using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -20,7 +19,7 @@ public sealed class PurchaseDrinkCommand(ulong initiatorUserId) : IRequest<Resul
 
     private ulong InitiatorUserId => initiatorUserId;
 
-    public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<PurchaseDrinkCommand, Result<Response>>
+    public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<PurchaseDrinkCommand, Result<Response>>
     {
         public async Task<Result<Response>> Handle(PurchaseDrinkCommand request, CancellationToken cancellationToken)
         {

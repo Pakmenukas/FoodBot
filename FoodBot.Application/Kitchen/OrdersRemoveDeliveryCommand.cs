@@ -2,7 +2,6 @@
 using FoodBot.Application.Errors;
 using FoodBot.Domain;
 using FoodBot.Domain.Enums;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -16,7 +15,7 @@ namespace FoodBot.Application.Kitchen
         private int Amount => amount;
 
 
-        public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<OrdersRemoveDeliveryCommand, Result<Response>>
+        public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<OrdersRemoveDeliveryCommand, Result<Response>>
         {
             public async Task<Result<Response>> Handle(OrdersRemoveDeliveryCommand request, CancellationToken cancellationToken)
             {
@@ -65,7 +64,7 @@ namespace FoodBot.Application.Kitchen
                     purchase.User.Money -= amountDividedByUsers;
                 }
 
-                context.SaveChanges();
+                await context.SaveChangesAsync(cancellationToken);
 
                 await logger.LogSuccess(request.InitiatorUserId, nameof(OrdersRemoveDeliveryCommand));
 

@@ -2,7 +2,6 @@
 using FoodBot.Application.Errors;
 using FoodBot.Application.Helpers;
 using FoodBot.Domain;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -16,7 +15,7 @@ public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink
     private string Drink => drink;
     private string ExtraItems => extraItems;
 
-    public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<KfcCommand, Result>
+    public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<KfcCommand, Result>
     {
         public async Task<Result> Handle(KfcCommand request, CancellationToken cancellationToken)
         {
@@ -30,13 +29,13 @@ public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink
             }
 
             var orderString = KfcHelpers.ConstructKfcOrderString(request.Taste, request.Drink, request.ExtraItems);
-            AddOrder(initiatorUser, orderString, 0);
+            await AddOrder(initiatorUser, orderString, 0);
 
             await logger.LogSuccess(request.InitiatorUserId, nameof(KfcCommand));
             return Result.Ok();
         }
 
-        private void AddOrder(User initiator, string product, int money)
+        private async Task AddOrder(User initiator, string product, int money)
         {
             var lastIncomplete = context.Orders
                 .Include(e => e.PurchaseList)
@@ -52,7 +51,7 @@ public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink
                     IsComplete = false,
                 };
                 context.Orders.Add(lastIncomplete);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
             var existing = lastIncomplete.PurchaseList.FirstOrDefault(e => e.User == initiator);
 
@@ -67,14 +66,7 @@ public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink
             existing.Product = product;
             existing.Date = DateTime.Now;
 
-            try
-            {
-                context.SaveChanges();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await context.SaveChangesAsync();
         }
     }
 

@@ -2,7 +2,6 @@
 using FoodBot.Application.Errors;
 using FoodBot.Domain;
 using FoodBot.Domain.Enums;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -15,7 +14,7 @@ namespace FoodBot.Application.Kitchen
         private ulong InitiatorUserId => initiatorUserId;
 
 
-        public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<OrdersGetQuery, Result<Response>>
+        public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<OrdersGetQuery, Result<Response>>
         {
             public async Task<Result<Response>> Handle(OrdersGetQuery request, CancellationToken cancellationToken)
             {

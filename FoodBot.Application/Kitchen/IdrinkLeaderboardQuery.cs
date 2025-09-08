@@ -1,5 +1,4 @@
 ﻿using FoodBot.Application.Common;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -21,7 +20,7 @@ namespace FoodBot.Application.Kitchen
             Yearly
         }
 
-        public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<IdrinkLeaderboardQuery, Result<Response>>
+        public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<IdrinkLeaderboardQuery, Result<Response>>
         {
             public async Task<Result<Response>> Handle(IdrinkLeaderboardQuery request, CancellationToken cancellationToken)
             {

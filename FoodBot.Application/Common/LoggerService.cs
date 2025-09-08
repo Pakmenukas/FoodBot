@@ -1,10 +1,9 @@
 using FoodBot.Domain;
-using FoodBot.Infrastructure;
 using MyResult;
 
 namespace FoodBot.Application.Common;
 
-public sealed class LoggerService(MainContext context) : ILogger
+public sealed class LoggerService(IMainContext context) : ILogger
 {
     public async Task LogSuccess(ulong userId, string commandName, List<string>? data = null)
     {

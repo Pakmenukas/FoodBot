@@ -2,7 +2,6 @@
 using FoodBot.Application.Errors;
 using FoodBot.Domain;
 using FoodBot.Domain.Enums;
-using FoodBot.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
@@ -20,7 +19,7 @@ public sealed class AddMoneyCommand(ulong initiatorUserId, AddMoneyCommand.Targe
     private Target TargetUser => target;
     private int Amount => amount;
 
-    public sealed class Handler(MainContext context, ILogger logger) : IRequestHandler<AddMoneyCommand, Result<Response>>
+    public sealed class Handler(IMainContext context, ILogger logger) : IRequestHandler<AddMoneyCommand, Result<Response>>
     {
         public async Task<Result<Response>> Handle(AddMoneyCommand request, CancellationToken cancellationToken)
         {
