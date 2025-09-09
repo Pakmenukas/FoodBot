@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\FoodBot.Application\FoodBot.Application.csproj"/>
+        <ProjectReference Include="..\FoodBot.Infrastructure\FoodBot.Infrastructure.csproj"/>
         <None Update="Data/*">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
