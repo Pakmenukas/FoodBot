@@ -10,9 +10,11 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
+var iconPath = configuration.GetValue<string>("IconPath");
+Console.WriteLine(iconPath);
 var serviceCollection = new ServiceCollection();
 
-serviceCollection.Configure<DataOptions>(configuration);
+serviceCollection.Configure<AppOptions>(configuration);
 serviceCollection.ConfigureDiscordBot();
 
 var serviceProvider = serviceCollection.BuildServiceProvider();

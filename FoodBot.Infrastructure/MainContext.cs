@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace FoodBot.Infrastructure;
 
-public class MainContext(IOptions<DataOptions> dataOptions) : DbContext, IMainContext
+public class MainContext(IOptions<AppOptions> dataOptions) : DbContext, IMainContext
 {
     // tables
     public DbSet<Log> Logs => Set<Log>();
@@ -16,8 +16,7 @@ public class MainContext(IOptions<DataOptions> dataOptions) : DbContext, IMainCo
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        var dbPath = Path.Combine(dataOptions.Value.DataPath, "main.db");
-        options.UseSqlite($"Data Source={dbPath}");
+        options.UseSqlite($"Data Source={dataOptions.Value.DatabasePath}");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

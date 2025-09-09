@@ -13,6 +13,13 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Services\DiscordBot\DiscordBot.csproj"/>
+        <None Include="Data/icon.ico">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="appsettings.json">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

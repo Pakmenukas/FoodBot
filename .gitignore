@@ -8,9 +8,6 @@ Data/*db
 Data/*db-shm
 Data/*db-wal
 
-# Bot token
-Data/token*
-
 # User-specific files
 *.rsuser
 *.suo

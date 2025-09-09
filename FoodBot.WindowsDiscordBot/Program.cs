@@ -24,7 +24,7 @@ internal static class Program
 
         hostBuilder.ConfigureServices(serviceCollection =>
         {
-            serviceCollection.Configure<DataOptions>(configuration);
+            serviceCollection.Configure<AppOptions>(configuration);
             serviceCollection.ConfigureDiscordBot();
         });
 
@@ -36,11 +36,10 @@ internal static class Program
         App.SetCompatibleTextRenderingDefault(false);
 
         var bot = host.Services.GetRequiredService<DiscordBot.FoodBot>();
-        var dataOptions = host.Services.GetRequiredService<IOptions<DataOptions>>();
 
         using var icon = new NotifyIcon();
         icon.Text = "FoodBot";
-        var iconPath = Path.Combine(dataOptions.Value.DataPath, "icon.ico");
+        var iconPath = configuration.GetValue<string>("IconPath");
         icon.Icon = Icon.ExtractAssociatedIcon(iconPath);
 
         icon.ContextMenuStrip = new ContextMenuStrip();
