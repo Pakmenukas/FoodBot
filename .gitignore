@@ -3,6 +3,14 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# SQLite
+Data/*db
+Data/*db-shm
+Data/*db-wal
+
+# Bot token
+Data/token*
+
 # User-specific files
 *.rsuser
 *.suo
@@ -269,11 +277,6 @@ ServiceFabricBackup/
 *.mdf
 *.ldf
 *.ndf
-
-# SQLite files
-Data/*db
-Data/*db-shm
-Data/*db-wal
 
 # Business Intelligence projects
 *.rdl.data

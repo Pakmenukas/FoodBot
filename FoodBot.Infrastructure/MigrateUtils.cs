@@ -11,7 +11,6 @@ public static class MigrateUtils
         var context = serviceProvider.GetService<IMainContext>();
         
         Console.WriteLine("Applying migrations");
-        context?.Database.EnsureCreated();
 
         try
         {

@@ -4,6 +4,7 @@ using FoodBot.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using App = System.Windows.Forms.Application;
 
 namespace FoodBot.WindowsDiscordBot;
@@ -15,7 +16,7 @@ internal static class Program
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appSettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddEnvironmentVariables()
             .Build();
 
@@ -35,10 +36,12 @@ internal static class Program
         App.SetCompatibleTextRenderingDefault(false);
 
         var bot = host.Services.GetRequiredService<DiscordBot.FoodBot>();
+        var dataOptions = host.Services.GetRequiredService<IOptions<DataOptions>>();
 
         using var icon = new NotifyIcon();
         icon.Text = "FoodBot";
-        icon.Icon = Icon.ExtractAssociatedIcon($"{Path.GetDirectoryName(App.ExecutablePath)}\\Data\\icon.ico");
+        var iconPath = Path.Combine(dataOptions.Value.DataPath, "icon.ico");
+        icon.Icon = Icon.ExtractAssociatedIcon(iconPath);
 
         icon.ContextMenuStrip = new ContextMenuStrip();
         icon.ContextMenuStrip.Items.Add("Exit", null, (_, _) => { Stop(bot); });
