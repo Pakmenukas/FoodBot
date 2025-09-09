@@ -9,17 +9,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.Net" Version="3.16.0"/>
-		<PackageReference Include="Fastenshtein" Version="1.0.10" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\FoodBot.Application\FoodBot.Application.csproj"/>
-        <ProjectReference Include="..\FoodBot.Infrastructure\FoodBot.Infrastructure.csproj"/>
+        <ProjectReference Include="..\Services\DiscordBot\DiscordBot.csproj"/>
         <None Update="Data/*">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="appsettings.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

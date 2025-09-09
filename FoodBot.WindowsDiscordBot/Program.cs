@@ -1,10 +1,7 @@
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using FoodBot.Application;
+using DiscordBot;
+using FoodBot.Application.Common;
 using FoodBot.Infrastructure;
-using FoodBot.WindowsDiscordBot.Controllers.Common;
-using FoodBot.WindowsDiscordBot.Forms;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using App = System.Windows.Forms.Application;
@@ -16,14 +13,28 @@ internal static class Program
     [STAThread]
     private static void Main()
     {
-        var host = CreateHostBuilder().Build();
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appSettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+        var hostBuilder = Host.CreateDefaultBuilder();
+
+        hostBuilder.ConfigureServices(serviceCollection =>
+        {
+            serviceCollection.Configure<DataOptions>(configuration);
+            serviceCollection.ConfigureDiscordBot();
+        });
+
+        var host = hostBuilder.Build();
 
         host.Services.ApplyMigrations();
 
         App.EnableVisualStyles();
         App.SetCompatibleTextRenderingDefault(false);
 
-        var bot = host.Services.GetRequiredService<DiscordBot>();
+        var bot = host.Services.GetRequiredService<DiscordBot.FoodBot>();
 
         using var icon = new NotifyIcon();
         icon.Text = "FoodBot";
@@ -37,58 +48,15 @@ internal static class Program
         icon.Visible = false;
     }
 
-    private static void Run(DiscordBot bot)
+    private static void Run(DiscordBot.FoodBot bot)
     {
         bot.RunAsync();
         App.Run();
     }
 
-    private static void Stop(DiscordBot bot)
+    private static void Stop(DiscordBot.FoodBot bot)
     {
         bot.StopAsync();
         App.Exit();
-    }
-
-    private static IServiceCollection ConfigureServices(this IServiceCollection services)
-    {
-        services.ConfigureApplication();
-        services.ConfigureInfrastructure();
-
-        services.AddControllers();
-        services.AddSingleton<ControllerFactory>();
-
-        services.AddSingleton<DiscordBot>();
-        services.AddSingleton<CommandService>();
-        services.AddSingleton<DiscordSocketClient>(provider =>
-        {
-            var config = new DiscordSocketConfig
-            {
-                GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildMembers | GatewayIntents.GuildMessages,
-                AlwaysDownloadUsers = true
-            };
-            return new DiscordSocketClient(config);
-        });
-        services.AddTransient<BotLauncherForm>();
-
-        return services;
-    }
-
-    private static IServiceCollection AddControllers(this IServiceCollection services)
-    {
-        var controllers = typeof(IController).Assembly.GetTypes()
-            .Where(t => t.GetInterface(nameof(IController)) == typeof(IController))
-            .ToList();
-        foreach (var controller in controllers)
-        {
-            services.AddSingleton(controller);
-        }
-
-        return services;
-    }
-
-    private static IHostBuilder CreateHostBuilder()
-    {
-        return Host.CreateDefaultBuilder()
-            .ConfigureServices((_, services) => { services.ConfigureServices(); });
     }
 }
