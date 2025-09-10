@@ -14,7 +14,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Services\DiscordBot\DiscordBot.csproj"/>
-        <None Include="Data/icon.ico">
+        <None Include="../Data/icon.ico">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
