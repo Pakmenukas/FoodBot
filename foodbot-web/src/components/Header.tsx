@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ThemeSwitch from "@/components/ThemeSwitch";
+import Logout from "@/components/actions/Logout";
 
 export default function Header() {
     return (
@@ -20,7 +21,8 @@ export default function Header() {
                 </Link>
             </div>
 
-            <ThemeSwitch/>
+            <ThemeSwitch />
+            <Logout />
         </header>
     )
 }

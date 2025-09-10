@@ -33,7 +33,7 @@ builder.Services.AddAuthentication(options =>
         options.LoginPath = "/login";
         options.AccessDeniedPath = null;
         options.ReturnUrlParameter = "return-url";
-        options.ExpireTimeSpan = TimeSpan.FromDays(1);
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
         options.SlidingExpiration = true;
 
         options.Cookie.Name = CookieAuthenticationDefaults.AuthenticationScheme;

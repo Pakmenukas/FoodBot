@@ -1,5 +1,8 @@
-using FoodBot.Application;
+using System.Security.Claims;
+using FoodBot.Application.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,20 +12,40 @@ namespace FoodBot.Api.Controllers;
 [ApiController]
 public sealed class AuthController(ISender mediator) : ControllerBase
 {
-    [HttpGet("test")]
-    [Authorize]
-    public async Task<ActionResult> Test()
+    [HttpPost("discord/validate")]
+    [AllowAnonymous]
+    public async Task<ActionResult> ValidateDiscordCode([FromBody] string code)
     {
-        var result = await mediator.Send(new TestQuery());
+        var result = await mediator.Send(new ValidateDiscordCodeCommand(code));
         if (result.IsFailure)
         {
             return BadRequest($"{result.Error.Code} {result.Error.Description}");
         }
-        foreach (var userClaim in HttpContext.User.Claims)
+        
+        var authProperties = new AuthenticationProperties
         {
-            Console.WriteLine($"{userClaim.Type} {userClaim.Value}");
-        }
+            IsPersistent = true,
+            AllowRefresh = true,
+        };
+        var identity = new ClaimsIdentity(
+            [new Claim("UserId", result.Value.ToString())],
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            ClaimTypes.Name,
+            ClaimTypes.Role);
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(identity),
+            authProperties);
 
-        return Ok(result.Value);
+        return NoContent();
+    }
+    
+    [HttpPost("logout")]
+    [Authorize]
+    public async Task<ActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        
+        return NoContent();
     }
 }
