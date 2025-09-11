@@ -13,18 +13,23 @@ public sealed class ValidateDiscordCodeCommand(string code) : IRequest<Result<Gu
     {
         public async Task<Result<Guid>> Handle(ValidateDiscordCodeCommand request, CancellationToken cancellationToken)
         {
-            var discordId = await discord.Authorize(request.Code, cancellationToken);
-            if (discordId.IsFailure)
-                return discordId.Error;
+            var user = await discord.Authorize(request.Code, cancellationToken);
+            if (user.IsFailure)
+                return user.Error;
 
-            var existingUser = context.Users.FirstOrDefault(e => e.DiscordId == discordId.Value);
-            if (existingUser is not null) return Result.Ok(existingUser.Id);
-
-            existingUser = new User
+            var existingUser = context.Users.FirstOrDefault(e => e.DiscordId == user.Value.DiscordId);
+            if (existingUser is null)
             {
-                Id = Guid.NewGuid()
-            };
-            context.Users.Add(existingUser);
+                existingUser = new Domain.User
+                {
+                    Id = Guid.NewGuid()
+                };
+                context.Users.Add(existingUser);
+            }
+
+            existingUser.Name = user.Value.Name;
+            existingUser.AvatarUrl = user.Value.AvatarUrl;
+            
             await context.SaveChangesAsync(cancellationToken);
 
             return Result.Ok(existingUser.Id);

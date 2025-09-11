@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ThemeSwitch from "@/components/ThemeSwitch";
 import Logout from "@/components/actions/Logout";
+import LoggedInUser from "@/components/LoggedInUser";
 
 export default function Header() {
     return (
@@ -22,6 +23,7 @@ export default function Header() {
             </div>
 
             <ThemeSwitch />
+            <LoggedInUser />
             <Logout />
         </header>
     )

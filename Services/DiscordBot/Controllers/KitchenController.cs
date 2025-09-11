@@ -361,7 +361,7 @@ public class KitchenController(ISender mediator) : IController
         {
             text += "Iš nebaigto užsakymo";
         }
-        ulong id = result.Value.randomUser.DiscordId;
+        ulong id = result.Value.RandomUser.DiscordId;
 
         await command.RespondAsync($"{text}: <@{id}> :game_die:");
     }

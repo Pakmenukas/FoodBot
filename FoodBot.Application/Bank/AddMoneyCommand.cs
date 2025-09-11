@@ -45,7 +45,7 @@ public sealed class AddMoneyCommand(ulong initiatorUserId, AddMoneyCommand.Targe
 
             if (targetUser is null)
             {
-                targetUser = new User
+                targetUser = new Domain.User
                 {
                     DiscordId = request.TargetUser.Id,
                     Name = request.TargetUser.Name,

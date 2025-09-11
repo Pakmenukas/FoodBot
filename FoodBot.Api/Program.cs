@@ -13,6 +13,9 @@ var isDevelopment = builder.Environment.EnvironmentName == "Development";
 builder.Services.Configure<AppOptions>(builder.Configuration);
 builder.Services.Configure<DiscordOptions>(builder.Configuration);
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserProvider, UserProvider>();
+
 builder.Services.AddTransient<ApiKeyValidator>();
 
 builder.Services.AddAuthentication(options =>

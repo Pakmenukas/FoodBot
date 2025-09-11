@@ -48,12 +48,4 @@ public sealed class AuthController(ISender mediator) : ControllerBase
         
         return NoContent();
     }
-    
-    [HttpPost("oauth2/token")]
-    [AllowAnonymous]
-    public Task Test()
-    {
-        Console.WriteLine("headers" + HttpContext.Request.Headers.UserAgent);
-        return Task.CompletedTask;
-    }
 }

@@ -10,7 +10,7 @@ namespace FoodBot.Application.Kitchen
 {
     public sealed class OrdersDoneCommand(ulong initiatorUserId) : IRequest<Result<OrdersDoneCommand.Response>>
     {
-        public sealed record Response(List<Purchase> PurchaseList, User GarbagePerson, int Random, int Sum);
+        public sealed record Response(List<Purchase> PurchaseList, Domain.User GarbagePerson, int Random, int Sum);
 
         private ulong InitiatorUserId => initiatorUserId;
 
@@ -121,16 +121,14 @@ namespace FoodBot.Application.Kitchen
                 }
             }
 
-            private User GetRandomPerson(List<Purchase> purchases, int randomInt)
+            private static Domain.User GetRandomPerson(List<Purchase> purchases, int randomInt)
             {
-                for (int i = 0; i < purchases.Count; i++)
+                foreach (var t in purchases)
                 {
-                    randomInt -= purchases[i].ChanceInt;
-                    if (randomInt < 0)
-                    {
-                        return purchases[i].User;
-                    }
+                    randomInt -= t.ChanceInt;
+                    if (randomInt < 0) return t.User;
                 }
+
                 return purchases.First().User;
             }
 

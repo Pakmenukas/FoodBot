@@ -35,7 +35,7 @@ public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink
             return Result.Ok();
         }
 
-        private async Task AddOrder(User initiator, string product, int money)
+        private async Task AddOrder(Domain.User initiator, string product, int money)
         {
             var lastIncomplete = context.Orders
                 .Include(e => e.PurchaseList)

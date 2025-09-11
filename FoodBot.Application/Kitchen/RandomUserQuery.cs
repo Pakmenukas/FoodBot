@@ -1,6 +1,5 @@
 ﻿using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Domain;
 using FoodBot.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ namespace FoodBot.Application.Kitchen
 {
     public sealed class RandomUserQuery(ulong initiatorUserId) : IRequest<Result<RandomUserQuery.Response>>
     {
-        public sealed record Response(User randomUser, bool IsComplete);
+        public sealed record Response(Domain.User RandomUser, bool IsComplete);
         private ulong InitiatorUserId => initiatorUserId;
 
 

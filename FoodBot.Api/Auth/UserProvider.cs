@@ -15,7 +15,7 @@ public sealed class UserProvider(IHttpContextAccessor httpContextAccessor) : IUs
     private string GetClaimValue()
     {
         return httpContextAccessor.HttpContext!.User.Claims
-            .Single(claim => claim.Type == "UserId") // TODO: move to config
+            .Single(claim => claim.Type == "userId") // TODO: move to config
             .Value;
     }
 }

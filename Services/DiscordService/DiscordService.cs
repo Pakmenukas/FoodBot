@@ -13,7 +13,7 @@ public sealed class DiscordService(IDiscordToken discordToken, IOptions<DiscordO
 {
     private readonly Uri _baseUri = new("https://discord.com/api/v10/");
     
-    public async Task<Result<ulong>> Authorize(string code, CancellationToken cancellationToken = default)
+    public async Task<Result<User>> Authorize(string code, CancellationToken cancellationToken = default)
     {
         using HttpClient client = new();
         client.BaseAddress = _baseUri;
@@ -43,11 +43,14 @@ public sealed class DiscordService(IDiscordToken discordToken, IOptions<DiscordO
 
         var userResult = await GetUser(token.AccessToken, cancellationToken);
         if (userResult.IsFailure) return userResult.Error;
-        
-        var idParseSuccess = ulong.TryParse(userResult.Value.Id, out var numberId);
-        if (!idParseSuccess) return new Error("ID", "Could not parse user id");
-        
-        return numberId;
+        var user = userResult.Value;
+
+        return Result<User>.Ok(new User
+        {
+            DiscordId = ulong.Parse(user.Id),
+            Name = user.GlobalName,
+            AvatarUrl = $"https://cdn.discordapp.com/avatars/{user.Id}/{user.Avatar}.png",
+        });
     }
 
     public async Task<Result<User>> GetUser(ulong userId, CancellationToken cancellationToken = default)
