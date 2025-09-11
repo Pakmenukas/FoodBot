@@ -1,5 +1,6 @@
 import type {ReactNode} from "react";
 import ColaIcon from "@/assets/cola.svg"
+import KfcIcon from "@/assets/kfc.svg"
 import UserIcon from "@/assets/user.svg"
 import UserSolidIcon from "@/assets/user-solid.svg"
 import CreditCardIcon from "@/assets/credit-card.svg"
@@ -27,6 +28,12 @@ const sidebarRoutes: SidebarCategory[] = [
                 iconSelected: <ColaIcon className="size-8"/>,
                 name: "Drinks",
                 path: "/drinks",
+            },
+            {
+                icon: <KfcIcon className="size-8"/>,
+                iconSelected: <KfcIcon className="size-8"/>,
+                name: "KFC",
+                path: "/kfc",
             },
         ]
     },

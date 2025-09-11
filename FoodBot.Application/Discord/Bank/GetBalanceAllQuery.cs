@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
 
-namespace FoodBot.Application.Bank;
+namespace FoodBot.Application.Discord.Bank;
 
 public sealed class GetBalanceAllQuery(ulong initiatorUserId) : IRequest<Result<List<GetBalanceAllQuery.Response>>>
 {

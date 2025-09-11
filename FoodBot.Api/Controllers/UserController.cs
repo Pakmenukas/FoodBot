@@ -1,5 +1,6 @@
 using FoodBot.Application.Bank;
 using FoodBot.Application.Common;
+using FoodBot.Application.Discord.Bank;
 using FoodBot.Application.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

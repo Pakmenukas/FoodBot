@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import ThemeSwitch from "@/components/ThemeSwitch";
+import ThemeSwitch from "@/components/actions/ThemeSwitch";
 import Logout from "@/components/actions/Logout";
-import LoggedInUser from "@/components/LoggedInUser";
+import LoggedInUser from "@/components/data/LoggedInUser";
 
 export default function Header() {
     return (
@@ -10,7 +10,7 @@ export default function Header() {
 
             <div className="flex-1">
                 <label htmlFor="app-drawer" className="btn btn-ghost rounded-field lg:hidden" aria-label="Open Menu">☰</label>
-                <Link href="/" className="btn btn-ghost">
+                <Link href="/public" className="btn btn-ghost">
                     <Image
                         className="size-8"
                         src="/icon.png"

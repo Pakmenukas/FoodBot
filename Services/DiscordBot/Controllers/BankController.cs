@@ -4,8 +4,10 @@ using DiscordBot.Controllers.Common;
 using DiscordBot.Utils;
 using FoodBot.Application.Bank;
 using FoodBot.Application.Common;
+using FoodBot.Application.Discord.Bank;
 using FoodBot.Application.Server;
 using MediatR;
+using AddMoneyCommand = FoodBot.Application.Discord.Bank.AddMoneyCommand;
 
 namespace DiscordBot.Controllers;
 

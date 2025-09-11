@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
 
-namespace FoodBot.Application.Kitchen
+namespace FoodBot.Application.Discord.Kitchen
 {
     public sealed class OrderCommand(ulong initiatorUserId, string product, int amount) : IRequest<Result>
     {

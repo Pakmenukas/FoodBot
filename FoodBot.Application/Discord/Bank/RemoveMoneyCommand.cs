@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
 
-namespace FoodBot.Application.Bank;
+namespace FoodBot.Application.Discord.Bank;
 
 public sealed class RemoveMoneyCommand(ulong initiatorUserId, int amount)
     : IRequest<Result<RemoveMoneyCommand.Response>>

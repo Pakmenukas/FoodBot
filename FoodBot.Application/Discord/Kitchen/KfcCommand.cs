@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
 
-namespace FoodBot.Application.Kitchen;
+namespace FoodBot.Application.Discord.Kitchen;
 
 public sealed class KfcCommand(ulong initiatorUserId, string taste, string drink, string extraItems) : IRequest<Result>
 {

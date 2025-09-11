@@ -1,9 +1,9 @@
 import userApi from "@/services/userApi";
-import ErrorCard from "@/components/ErrorCard";
+import ErrorCard from "@/components/layout/ErrorCard";
 import Image from "next/image";
 import {cookies} from "next/headers";
 import User from "@/models/User";
-import Table, {TableColumn} from "@/components/Table";
+import Table, {TableColumn} from "@/components/layout/Table";
 import AddMoneyForm from "@/components/forms/AddMoneyForm";
 import DeleteUserForm from "@/components/forms/DeleteUserForm";
 import AddUserForm from "@/components/forms/AddUserForm";
@@ -54,7 +54,7 @@ export default async function UsersPage() {
     )
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-8">
             <h1 className="text-4xl">Users</h1>
 
             {

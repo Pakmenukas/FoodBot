@@ -1,8 +1,10 @@
 using FoodBot.Application.Bank;
+using FoodBot.Application.Discord.Bank;
 using FoodBot.Application.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AddMoneyCommand = FoodBot.Application.Bank.AddMoneyCommand;
 
 namespace FoodBot.Api.Controllers;
 
@@ -29,7 +31,7 @@ public sealed class BankController(ISender mediator) : ControllerBase
     }
     
     [HttpPost("add")]
-    public async Task<ActionResult> AddMoney(AddMoneyToUserCommand command)
+    public async Task<ActionResult> AddMoney(AddMoneyCommand command)
     {
         var result = await mediator.Send(command);
         if (result.IsFailure)

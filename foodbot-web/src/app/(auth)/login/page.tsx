@@ -6,7 +6,7 @@ import authApi from "@/services/authApi";
 import {useSearchParams} from "next/navigation";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
-import ErrorCard from "@/components/ErrorCard";
+import ErrorCard from "@/components/layout/ErrorCard";
 
 export default function LoginPage() {
     const router = useRouter();

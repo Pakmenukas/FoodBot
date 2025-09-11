@@ -1,12 +1,11 @@
-﻿using FoodBot.Application.Common;
+﻿using FoodBot.Application.Bank;
+using FoodBot.Application.Common;
 using FoodBot.Application.Errors;
-using FoodBot.Domain;
-using FoodBot.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
 
-namespace FoodBot.Application.Bank;
+namespace FoodBot.Application.Discord.Bank;
 
 public sealed class DeleteMeCommand : IRequest<Result>
 {

@@ -4,12 +4,12 @@ using Discord.WebSocket;
 using DiscordBot.Controllers.Common;
 using DiscordBot.Utils;
 using FoodBot.Application.Common;
+using FoodBot.Application.Discord.Kitchen;
 using FoodBot.Application.Helpers;
-using FoodBot.Application.Kitchen;
 using FoodBot.Application.Server;
 using FoodBot.Domain;
 using MediatR;
-using static FoodBot.Application.Kitchen.IdrinkLeaderboardQuery;
+using static FoodBot.Application.Discord.Kitchen.IdrinkLeaderboardQuery;
 
 namespace DiscordBot.Controllers;
 

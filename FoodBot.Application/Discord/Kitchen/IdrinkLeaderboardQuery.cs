@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyResult;
 
-namespace FoodBot.Application.Kitchen
+namespace FoodBot.Application.Discord.Kitchen
 {
     public sealed class IdrinkLeaderboardQuery(ulong initiatorUserId, IdrinkLeaderboardQuery.LeaderboardPeriod leaderboardPeriod) : IRequest<Result<IdrinkLeaderboardQuery.Response>>
     {
