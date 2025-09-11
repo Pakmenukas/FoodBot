@@ -6,6 +6,7 @@ import authApi from "@/services/authApi";
 import {useSearchParams} from "next/navigation";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
+import ErrorCard from "@/components/ErrorCard";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -44,11 +45,7 @@ export default function LoginPage() {
                 </Link>
             }
             {
-                (!!error) &&
-                <div className="card bg-error text-center text-sm text-error-content p-4">
-                    <span>{error}</span>
-                    <span>Please try again later</span>
-                </div>
+                (!!error) && <ErrorCard title="Error" error={error} description="Please try again later"/>
             }
         </div>
     );

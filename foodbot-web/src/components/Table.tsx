@@ -2,6 +2,7 @@ import {type ReactNode} from "react";
 
 export interface TableColumn<T> {
     headerName: string;
+    className?: string;
     accessor: (item: T) => ReactNode;
 }
 
@@ -21,7 +22,7 @@ export default function Table<T>(props: TableProps<T>) {
                 <thead className="">
                 <tr>
                     {props.columns.map((column, index) => (
-                        <th key={index} className="">{column.headerName}</th>
+                        <th key={index} className={column.className}>{column.headerName}</th>
                     ))}
                     {hasActions && <th>Actions</th>}
                 </tr>

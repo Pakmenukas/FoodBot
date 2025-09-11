@@ -7,8 +7,8 @@ namespace FoodBot.Domain;
 public class Log : BaseEntity<Guid>
 {
     [ForeignKey(nameof(UserId))]
-    public User User { get; set; }
-    public Guid UserId { get; set; }
+    public User? User { get; set; }
+    public Guid? UserId { get; set; }
 
     [Required]
     public DateTime Date { get; set; }

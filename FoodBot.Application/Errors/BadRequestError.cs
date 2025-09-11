@@ -7,12 +7,14 @@ public class BadRequestError(BadRequestError.ErrorCode errorCode) : BaseError<Ba
 
     public enum ErrorCode
     {
-        AmountTooLow
+        AmountTooLow,
+        InvalidAmountNumberFormat,
     }
 
     public static Dictionary<ErrorCode, string> MessageMap { get; } = new()
     {
-        { ErrorCode.AmountTooLow, "Per maža suma" }
+        { ErrorCode.AmountTooLow, "Per maža suma" },
+        { ErrorCode.InvalidAmountNumberFormat, "Netaisyklingas sumos formatas" },
     };
 
 }

@@ -11,7 +11,6 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 var iconPath = configuration.GetValue<string>("IconPath");
-Console.WriteLine(iconPath);
 var serviceCollection = new ServiceCollection();
 
 serviceCollection.Configure<AppOptions>(configuration);

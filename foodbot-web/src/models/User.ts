@@ -1,7 +1,7 @@
 export default interface User {
+    id?: string;
+    discordId: string;
     name: string;
-    avatarUrl: string;
+    avatarUrl?: string;
     money: number;
-    noGarbage: boolean;
-    role: string;
 }

@@ -22,7 +22,7 @@ export default function RootLayout({children}: Readonly<{ children: ReactNode }>
         <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div
-            className="fixed inset-0 bg-cover w-full h-full bg-center bg-no-repeat blur-[3px] -z-10"
+            className="fixed inset-0 bg-cover w-full h-full bg-center bg-no-repeat blur-[4px] -z-10"
             style={{
                 backgroundImage: 'url(/background.gif)'
             }}

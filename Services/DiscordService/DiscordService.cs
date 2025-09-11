@@ -13,7 +13,7 @@ public sealed class DiscordService(IDiscordToken discordToken, IOptions<DiscordO
 {
     private readonly Uri _baseUri = new("https://discord.com/api/v10/");
     
-    public async Task<Result<User>> Authorize(string code, CancellationToken cancellationToken = default)
+    public async Task<Result<DiscordUser>> Authorize(string code, CancellationToken cancellationToken = default)
     {
         using HttpClient client = new();
         client.BaseAddress = _baseUri;
@@ -45,15 +45,15 @@ public sealed class DiscordService(IDiscordToken discordToken, IOptions<DiscordO
         if (userResult.IsFailure) return userResult.Error;
         var user = userResult.Value;
 
-        return Result<User>.Ok(new User
+        return new DiscordUser
         {
-            DiscordId = ulong.Parse(user.Id),
+            Id = ulong.Parse(user.Id),
             Name = user.GlobalName,
             AvatarUrl = $"https://cdn.discordapp.com/avatars/{user.Id}/{user.Avatar}.png",
-        });
+        };
     }
 
-    public async Task<Result<User>> GetUser(ulong userId, CancellationToken cancellationToken = default)
+    public async Task<Result<DiscordUser>> GetUser(ulong userId, CancellationToken cancellationToken = default)
     {
         using HttpClient client = new();
         client.BaseAddress = _baseUri;
@@ -71,12 +71,42 @@ public sealed class DiscordService(IDiscordToken discordToken, IOptions<DiscordO
         });
         if (user is null) return new Error("JSON", "Could not deserialize user");
         
-        return Result<User>.Ok(new User
+        return new DiscordUser
         {
-            DiscordId = ulong.Parse(user.Id),
-            Name = user.GlobalName,
-            AvatarUrl = $"https://cdn.discordapp.com/avatars/{user.Id}/{user.Avatar}.png",
+            Id = ulong.Parse(user.Id),
+            Name = user.GlobalName ?? user.Username,
+            AvatarUrl = user.Avatar is not null 
+                ? $"https://cdn.discordapp.com/avatars/{user.Id}/{user.Avatar}.png" 
+                : null,
+        };
+    }
+
+    public async Task<Result<List<DiscordUser>>> GetMembers(CancellationToken cancellationToken = default)
+    {
+        using HttpClient client = new();
+        client.BaseAddress = _baseUri;
+        client.DefaultRequestHeaders.Add("Authorization", $"Bot {discordToken.Token}");
+        
+        var response = await client.GetAsync($"guilds/{options.Value.GuildId}/members?limit=30", cancellationToken);
+        if (!response.IsSuccessStatusCode) return new Error(
+            response.StatusCode.ToString(), 
+            await response.Content.ReadAsStringAsync(cancellationToken));
+        
+        var guildMembersJson = await response.Content.ReadAsStringAsync(cancellationToken);
+        var members = JsonSerializer.Deserialize<List<GuildMembersResponse>>(guildMembersJson, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
         });
+        if (members is null) return new Error("JSON", "Could not deserialize user");
+        
+        return members.Select(m => new DiscordUser
+        {
+            Id = ulong.Parse(m.User.Id),
+            Name = m.Nick ?? m.User.GlobalName ?? m.User.Username,
+            AvatarUrl = (m.Avatar ?? m.User.Avatar) is not null 
+                ? $"https://cdn.discordapp.com/avatars/{m.User.Id}/{m.Avatar ?? m.User.Avatar}.png" 
+                : null,
+        }).ToList();
     }
 
     private async Task<Result<UserResponse>> GetUser(string authToken, CancellationToken cancellationToken = default)

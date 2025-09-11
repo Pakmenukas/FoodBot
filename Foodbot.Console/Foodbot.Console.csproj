@@ -9,10 +9,6 @@
 
     <ItemGroup>
         <PackageReference Include="Devart.Data.SQLite.EFCore.Design" Version="6.4.290" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.8" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
