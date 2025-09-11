@@ -6,14 +6,14 @@ using MyResult;
 
 namespace FoodBot.Application.User;
 
-public sealed class GetUserListQuery : IRequest<Result<List<GetUserListQuery.UserResponse>>>
+public sealed class GetAllUserListQuery : IRequest<Result<List<GetAllUserListQuery.UserResponse>>>
 {
     public record UserResponse(Guid? Id, string DiscordId, string Name, string? AvatarUrl, int Money);
 
-    public sealed class Handler(IMainContext context, IDiscord discord, ILogger<GetUserListQuery> logger) 
-        : IRequestHandler<GetUserListQuery, Result<List<UserResponse>>>
+    public sealed class Handler(IMainContext context, IDiscord discord, ILogger<GetAllUserListQuery> logger) 
+        : IRequestHandler<GetAllUserListQuery, Result<List<UserResponse>>>
     {
-        public async Task<Result<List<UserResponse>>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<UserResponse>>> Handle(GetAllUserListQuery request, CancellationToken cancellationToken)
         {
             var discordUsers = await discord.GetMembers(cancellationToken);
             var savedUsers = await context.Users

@@ -36,10 +36,10 @@ public sealed class UserController(ISender mediator, IUserProvider userProvider)
         return NoContent();
     }
     
-    [HttpGet]
-    public async Task<ActionResult> GetUserList(CancellationToken cancellationToken)
+    [HttpGet("all")]
+    public async Task<ActionResult> GetUserAllList(CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new GetUserListQuery(), cancellationToken);
+        var result = await mediator.Send(new GetAllUserListQuery(), cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);

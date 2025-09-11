@@ -8,8 +8,8 @@ export const authApi = {
         return await baseFetch<never, User>("api/user/me", "GET", cookieStore);
     },
 
-    async getList(cookieStore?: ReadonlyRequestCookies) {
-        return await baseFetch<never, User[]>("api/user", "GET", cookieStore);
+    async getAllList(cookieStore?: ReadonlyRequestCookies) {
+        return await baseFetch<never, User[]>("api/user/all", "GET", cookieStore);
     },
 
     async addUser(discordId: string, cookieStore?: ReadonlyRequestCookies) {

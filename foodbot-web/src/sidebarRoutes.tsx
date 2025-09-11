@@ -1,7 +1,9 @@
 import type {ReactNode} from "react";
 import ColaIcon from "@/assets/cola.svg"
-import UserOutlineIcon from "@/assets/user-outline.svg"
+import UserIcon from "@/assets/user.svg"
 import UserSolidIcon from "@/assets/user-solid.svg"
+import CreditCardIcon from "@/assets/credit-card.svg"
+import CreditCardSolidIcon from "@/assets/credit-card-solid.svg"
 
 interface SidebarCategory {
     name: string;
@@ -29,10 +31,21 @@ const sidebarRoutes: SidebarCategory[] = [
         ]
     },
     {
+        name: "Banking",
+        routes: [
+            {
+                icon: <CreditCardIcon className="size-8"/>,
+                iconSelected: <CreditCardSolidIcon className="size-8"/>,
+                name: "Transfers",
+                path: "/transfers",
+            },
+        ]
+    },
+    {
         name: "Management",
         routes: [
             {
-                icon: <UserOutlineIcon className="size-8"/>,
+                icon: <UserIcon className="size-8"/>,
                 iconSelected: <UserSolidIcon className="size-8"/>,
                 name: "Users",
                 path: "/users",

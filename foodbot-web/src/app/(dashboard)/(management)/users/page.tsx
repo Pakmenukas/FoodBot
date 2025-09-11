@@ -11,7 +11,7 @@ import PhotoIcon from "@/assets/photo.svg"
 
 export default async function UsersPage() {
     const cookieStore = await cookies();
-    const users = await userApi.getList(cookieStore);
+    const users = await userApi.getAllList(cookieStore);
 
     const columns: TableColumn<User>[] = [
         {
