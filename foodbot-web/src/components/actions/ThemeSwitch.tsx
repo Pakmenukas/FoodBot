@@ -6,7 +6,8 @@ import MoonIcon from "@/assets/moon.svg"
 
 export default function ThemeSwitch() {
 
-    const darkModeName = "dark";
+    const lightModeName = "autumn";
+    const darkModeName = "night";
 
     const [isDark, setIsDark] = useState(false);
     const [mounted, setMounted] = useState(false);
@@ -38,7 +39,7 @@ export default function ThemeSwitch() {
         <label className="swap swap-rotate size-4">
             <input type="checkbox" className="theme-controller" value={darkModeName} checked={isDark}
                    onChange={() => setIsDark(!isDark)} aria-label="Toggle dark mode"/>
-            <input type="checkbox" className="theme-controller hidden" value={"light"} checked={!isDark}
+            <input type="checkbox" className="theme-controller hidden" value={lightModeName} checked={!isDark}
                    onChange={() => setIsDark(!isDark)} aria-label="Toggle dark mode"/>
             <SunIcon className="swap-off size-6"/>
             <MoonIcon className="swap-on size-6"/>
