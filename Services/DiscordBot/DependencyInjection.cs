@@ -13,8 +13,8 @@ public static class DependencyInjection
     public static IServiceCollection ConfigureDiscordBot(this IServiceCollection services)
     {
         services.AddSingleton<ControllerFactory>();
-        services.ConfigureInfrastructure();
-        services.ConfigureApplication();
+        services.AddInfrastructure();
+        services.AddApplication();
         var controllers = typeof(IController).Assembly.GetTypes()
             .Where(t => t.GetInterface(nameof(IController)) == typeof(IController))
             .ToList();

@@ -19,16 +19,16 @@ public sealed class AuthController(ISender mediator) : ControllerBase
         var result = await mediator.Send(new ValidateDiscordCodeCommand(code));
         if (result.IsFailure)
         {
-            return BadRequest($"{result.Error.Code} {result.Error.Description}");
+            return Unauthorized($"{result.Error.Code} {result.Error.Description}");
         }
-        
+
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = true,
             AllowRefresh = true,
         };
         var identity = new ClaimsIdentity(
-            [new Claim("UserId", result.Value.ToString())],
+            [new Claim("userId", result.Value.ToString())],
             CookieAuthenticationDefaults.AuthenticationScheme,
             ClaimTypes.Name,
             ClaimTypes.Role);
@@ -47,5 +47,13 @@ public sealed class AuthController(ISender mediator) : ControllerBase
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         
         return NoContent();
+    }
+    
+    [HttpPost("oauth2/token")]
+    [AllowAnonymous]
+    public Task Test()
+    {
+        Console.WriteLine("headers" + HttpContext.Request.Headers.UserAgent);
+        return Task.CompletedTask;
     }
 }

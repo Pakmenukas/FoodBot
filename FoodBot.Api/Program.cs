@@ -1,11 +1,17 @@
 using System.Text.Json.Serialization;
+using DiscordService;
 using FoodBot.Api.Auth;
 using FoodBot.Application;
+using FoodBot.Application.Common;
 using FoodBot.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
+var isDevelopment = builder.Environment.EnvironmentName == "Development";
+
+builder.Services.Configure<AppOptions>(builder.Configuration);
+builder.Services.Configure<DiscordOptions>(builder.Configuration);
 
 builder.Services.AddTransient<ApiKeyValidator>();
 
@@ -38,9 +44,8 @@ builder.Services.AddAuthentication(options =>
 
         options.Cookie.Name = CookieAuthenticationDefaults.AuthenticationScheme;
         options.Cookie.HttpOnly = true;
-        options.Cookie.SameSite = SameSiteMode.Lax;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                
+        options.Cookie.SecurePolicy = isDevelopment ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
+
         options.Events = new CookieAuthenticationEvents
         {
             OnRedirectToLogin = ctx =>
@@ -73,8 +78,8 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services
-    .ConfigureInfrastructure()
-    .ConfigureApplication()
+    .AddInfrastructure()
+    .AddApplication()
     .AddControllers()
     .AddJsonOptions(options =>
     {
@@ -85,11 +90,12 @@ builder.Services
     });
 
 var app = builder.Build();
-
+var allowedOrigins = app.Services.GetRequiredService<IConfiguration>().GetSection("AllowedOrigins").Get<string[]>() ?? [];
 app.UseCors(options => options
-    .AllowAnyOrigin()
+    .WithOrigins(allowedOrigins)
     .AllowAnyMethod()
     .AllowAnyHeader()
+    .AllowCredentials()
 );
 
 app.UseAuthentication();

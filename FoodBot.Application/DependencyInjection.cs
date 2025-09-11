@@ -7,7 +7,7 @@ namespace FoodBot.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection ConfigureApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(c => c.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
