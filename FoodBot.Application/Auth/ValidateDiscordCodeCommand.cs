@@ -1,5 +1,4 @@
 ﻿using FoodBot.Application.Common;
-using FoodBot.Domain;
 using MediatR;
 using MyResult;
 
