@@ -1,9 +1,11 @@
+using FoodBot.Application.Common;
 using FoodBot.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace FoodBot.Infrastructure;
 
-public class MainContext : DbContext
+public class MainContext(IOptions<AppOptions> dataOptions) : DbContext, IMainContext
 {
     // tables
     public DbSet<Log> Logs => Set<Log>();
@@ -12,18 +14,15 @@ public class MainContext : DbContext
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<Purchase> Purchases => Set<Purchase>();
 
-    // config
-    private static string DbPath => "Data\\main.db";
-
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        options.UseSqlite($"Data Source={DbPath}");
+        options.UseSqlite($"Data Source={dataOptions.Value.DatabasePath}");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
+        
         modelBuilder.Entity<Order>()
             .HasMany(x => x.PurchaseList)
             .WithOne(x => x.Order)
