@@ -9,7 +9,6 @@ public static class MigrateUtils
     {
         var context = serviceProvider.GetService<MainContext>();
         
-        context?.Database.EnsureCreated();
         try
         {
             context?.Database.Migrate();

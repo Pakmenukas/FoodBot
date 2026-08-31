@@ -17,6 +17,9 @@ public class User : BaseEntity<Guid>
 
     [Required]
     public bool NoGarbage { get; set; }
+    
+    [Required]
+    public bool Hidden { get; set; }
 
     [Required]
     public Role Role { get; set; }

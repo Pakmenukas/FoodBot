@@ -44,6 +44,7 @@ public sealed class GetBalanceAllQuery(ulong initiatorUserId) : IRequest<Result<
 
             var users = await context.Users
                 .AsNoTracking()
+                .Where(e => !e.Hidden)
                 .OrderByDescending(e => e.Money)
                 .ToListAsync(cancellationToken);
 
